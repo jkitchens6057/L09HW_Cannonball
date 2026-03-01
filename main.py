@@ -5,6 +5,24 @@ import pandas as pd
 import streamlit as st
 import random
 
+## Represents the interface
+#
+class Print_Iface:
+    
+    def graph(self, cannonball, angle, velocity, user_grav, step):
+        cannonball._vx = velocity * cos(angle)
+        cannonball._vy = velocity * sin(angle)
+        cannonball.move(step, user_grav)
+
+        xs = []
+        ys = []
+
+        while cannonball.getY() > 1e-14:
+            xs.append(cannonball.getX())
+            ys.append(cannonball.getY())
+            cannonball.move(step, user_grav)
+
+        return xs, ys, cannonball
 
 ## Represent a cannonball, tracking its position and velocity.
 #
@@ -17,6 +35,7 @@ class Cannonball:
         self._y = 0
         self._vx = 0
         self._vy = 0
+        self.iface = Print_Iface()
 
     ## Move the cannon ball, using its current velocities.
     #  @param sec the amount of time that has elapsed.
@@ -47,17 +66,7 @@ class Cannonball:
     #  @param velocity the initial velocity of the ball
     #
     def shoot(self, angle, velocity, user_grav, step=0.1):
-        self._vx = velocity * cos(angle)
-        self._vy = velocity * sin(angle)
-        self.move(step, user_grav)
-
-        xs = []
-        ys = []
-
-        while self.getY() > 1e-14:
-            xs.append(self.getX())
-            ys.append(self.getY())
-            self.move(step, user_grav)
+        xs, ys, self = self.iface.graph(self,angle,velocity,user_grav,step)
 
         return xs, ys
 
