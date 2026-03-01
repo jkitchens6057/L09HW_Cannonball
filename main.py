@@ -61,6 +61,12 @@ class Cannonball:
 
         return xs, ys
 
+class Crazyball(Cannonball):
+    def move():
+        self.rand_q = random.randrange(0,10)
+        if self.getX() < 400:
+            self.x += self.rand_q
+
 def run_app():
     st.title("Cannonball Trajectory")
 
