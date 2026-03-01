@@ -62,10 +62,19 @@ class Cannonball:
         return xs, ys
 
 class Crazyball(Cannonball):
-    def move(self, angle, user_grav, step=.1):
+    def move(self, sec, grav):
         self.rand_q = random.randrange(0,10)
         if self.getX() < 400:
-            self.x += self.rand_q
+            dx = self._vx * self.rand_q
+        else:
+            dx = self._vx * -self.rand_q
+
+        dy = self._vy * sec
+
+        self._vy = self._vy - grav * sec
+
+        self._x = self._x + dx
+        self._y = self._y + dy
 
 def run_app():
     st.title("Cannonball Trajectory")
@@ -99,10 +108,10 @@ def run_app():
             alt.Chart(df)
             .mark_line()
             .encode(
-                x=alt.X("x:Q", scale=alt.Scale(domain=[0, 200]), title="Distance (m)"),
-                y=alt.Y("y:Q", scale=alt.Scale(domain=[0, 100]), title="Height (m)")
+                x=alt.X("x:Q", scale=alt.Scale(domain=[0, 1400]), title="Distance (m)"),
+                y=alt.Y("y:Q", scale=alt.Scale(domain=[0, 500]), title="Height (m)")
             )
-            .properties(width=700, height=400)
+            .properties(width=700, height=600)
         )
         st.altair_chart(chart, use_container_width=True)
     elif crazyball:
@@ -120,8 +129,8 @@ def run_app():
             alt.Chart(df)
             .mark_line()
             .encode(
-                x=alt.X("x:Q", scale=alt.Scale(domain=[0, 600]), title="Distance (m)"),
-                y=alt.Y("y:Q", scale=alt.Scale(domain=[0, 300]), title="Height (m)")
+                x=alt.X("x:Q", scale=alt.Scale(domain=[0, 800]), title="Distance (m)"),
+                y=alt.Y("y:Q", scale=alt.Scale(domain=[0, 500]), title="Height (m)")
             )
             .properties(width=700, height=400)
         )
